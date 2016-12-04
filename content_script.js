@@ -10,7 +10,10 @@ var THEYLIVE = {
         images = node.getElementsByTagName("img");
         console.log(images.length);
         for (i = 0; i < images.length; i = i + 1) {
-            images[i].src = "http://osric.com/chris/images/business-cat-meme.jpg";
+            if (!images[i].hasAttribute("decrypted")) {
+                images[i].src = "http://osric.com/chris/images/business-cat-meme.jpg";
+                images[i].setAttribute("decrypted", "true");
+            }
         }
     }
 
