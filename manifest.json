@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "They Live Steganographic Decryption",
+    "version": "1.0",
+    "description": "Converts images to uncover hidden messages, if any. Like putting on the sunglasses in the sci-fi classic, They Live.",
+    "content_scripts":
+    [
+        {
+            "matches": ["*://*/*"],
+            "js": ["content_script.js"],
+            "run_at": "document_end"
+        }
+    ]
+}
+
