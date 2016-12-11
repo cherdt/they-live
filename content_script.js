@@ -4,7 +4,7 @@ var decryptImage = function (canvasNode) {
     'use strict';
     var canvasContext, pixelData, i, rgb;
     canvasContext = canvasNode.getContext('2d');
-    pixelData = canvasContext.getImageData(0, 0, 200, 200);
+    pixelData = canvasContext.getImageData(0, 0, canvasNode.width, canvasNode.height);
     // loop over all pixels and get the lowest-information red bit
     for (i = 0; i < pixelData.data.length; i = i + 4) {
         // bitwise-and the red value
@@ -51,11 +51,21 @@ var THEYLIVE = {
                     // Draw the (scaled) image to the Canvas element
                     canvasContext.drawImage(imageNode, 0, 0, imageNode.width, imageNode.height);
                     // Convert image
-                    decryptImage(canvasNode);
-                    // Set flag so we don't re-process
-                    imageNode.setAttribute("decrypted", "true");
-                    // Hide the original image
-                    imageNode.style.display = "none";
+                    try {
+                        decryptImage(canvasNode);
+                        // Set flag so we don't re-process
+                        imageNode.setAttribute("decrypted", "true");
+                        // Hide the original image
+                        imageNode.style.display = "none";
+                    } catch (err) {
+                        console.log("unable to decrypt image: " + err);
+                        // decrypt failed, so remove the canvas
+                        parentNode.removeChild(canvasNode);
+                        // replace the image with gray pixels
+                        // not sure this makes sense to the user
+                        // imageNode.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM88x8AAp0BzdNtlUkAAAAASUVORK5CYII=";
+                    }
+
                 } catch (e) {
                     console.log("an error occurred: " + e);
                 }
