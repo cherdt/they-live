@@ -3,6 +3,13 @@
     "name": "They Live Steganographic Decryption",
     "version": "1.0",
     "description": "Converts images to uncover hidden messages, if any. Like putting on the sunglasses in the sci-fi classic, They Live.",
+    "browser_action": {
+      "default_icon": {
+        "16": "images/icon16.png",
+        "24": "images/icon24.png",
+        "32": "images/icon32.png"
+      }
+    },
     "content_scripts":
     [
         {
@@ -10,6 +17,10 @@
             "js": ["content_script.js"],
             "run_at": "document_end"
         }
-    ]
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    }
 }
 

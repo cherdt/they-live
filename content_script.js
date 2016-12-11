@@ -1,26 +1,25 @@
+/* jshint "browser": true, "bitwise": false, "predef": ["chrome", "Event"] */
+
 var decryptImage = function (canvasNode) {
     'use strict';
-    var canvasContext, pixelData, tempPixelData, i, rgb;
-    console.log("decrypt image");
-    console.log(canvasNode);
+    var canvasContext, pixelData, i, rgb;
     canvasContext = canvasNode.getContext('2d');
     pixelData = canvasContext.getImageData(0, 0, 200, 200);
-    console.log('pixelData: ' + pixelData);
-    console.log('how many pixels data: ' + pixelData.data.length);
+    // loop over all pixels and get the lowest-information red bit
     for (i = 0; i < pixelData.data.length; i = i + 4) {
         // bitwise-and the red value
         if ((pixelData.data[i] & 1) === 1) {
-            rgb = 255;
+            rgb = 255; // white
         } else {
-            rgb = 0;
+            rgb = 0; // black
         }
-        //console.log(rgb);
 
-        pixelData.data[i] = rgb;
-        pixelData.data[i + 1] = rgb;
-        pixelData.data[i + 2] = rgb;
+        pixelData.data[i] = rgb; // set red pixel
+        pixelData.data[i + 1] = rgb; // set green pixel
+        pixelData.data[i + 2] = rgb; // set blue pixel
         pixelData.data[i + 3] = 255; // alpha = 100%
     }
+    // re-draw the canvas element with the new black & white image
     canvasContext.putImageData(pixelData, 0, 0);
 };
 
@@ -33,18 +32,15 @@ var THEYLIVE = {
             console.log("It's an event");
             node = document.body;
         }
+
         images = node.getElementsByTagName("img");
-        console.log(images.length);
+
         for (i = 0; i < images.length; i = i + 1) {
             imageNode = images[i];
             //imageNode.crossOrigin = "Anonymous";
             if (!imageNode.hasAttribute("decrypted")) {
-                //images[i].src = "http://osric.com/chris/images/business-cat-meme.jpg";
                 parentNode = imageNode.parentNode;
                 canvasNode = document.createElement("canvas");
-                console.log(imageNode.width);
-                console.log(imageNode.src + ":" + imageNode.offsetWidth + "," + imageNode.offsetHeight);
-                console.log(imageNode.width + "," + imageNode.height);
                 canvasNode.height = imageNode.offsetHeight;
                 canvasNode.width = imageNode.offsetWidth;
                 canvasNode.style.height = canvasNode.height + "px";
@@ -52,20 +48,17 @@ var THEYLIVE = {
                 parentNode.insertBefore(canvasNode, imageNode);
                 canvasContext = canvasNode.getContext('2d');
                 try {
-                    console.log(imageNode);
                     // Draw the (scaled) image to the Canvas element
                     canvasContext.drawImage(imageNode, 0, 0, imageNode.width, imageNode.height);
-                    //canvasContext.drawImage(imageNode, 0, 0);
                     // Convert image
                     decryptImage(canvasNode);
                     // Set flag so we don't re-process
                     imageNode.setAttribute("decrypted", "true");
                     // Hide the original image
-                    //imageNode.style.display = "none";
+                    imageNode.style.display = "none";
                 } catch (e) {
                     console.log("an error occurred: " + e);
                 }
-
 
             }
         }
@@ -73,12 +66,12 @@ var THEYLIVE = {
 
 };
 
-
-window.onload = setTimeout(
-    function () {
+// Listen for a specific message from the background
+chrome.runtime.onMessage.addListener(
+    function (request) {
         'use strict';
-        THEYLIVE.convertAllImages(document.body);
-    },
-    1000
+        if (request.command === "Decrypt Images") {
+            THEYLIVE.convertAllImages(document.body);
+        }
+    }
 );
-window.onscroll = THEYLIVE.convertAllImages;
