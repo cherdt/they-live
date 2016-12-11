@@ -11,5 +11,11 @@ This project is just-for-fun, mostly to look deeper
 into image manipulation using Javascript and the 
 HTML5 canvas element.
 
+Demo
+----
+[http://osric.com/chris/business-cat.html](http://osric.com/chris/business-cat.html)
+
+Thanks
+------
 Thanks to Ben Mullins's "Burning Man Enhancer" Chrome extension
 for getting this started.
