@@ -17,7 +17,7 @@ Install
 -------
 
 * [Download the extension](http://osric.com/chris/steganography/theylive.crx)
-** Verify the current MD5 checksum: 071f9b5e5c17e5faf4220ecc19eedb1a
+** Verify the current MD5 checksum: fb7db8fca9b70777424742d1aa79c437
 * Open the Chrome extensions page: chrome://extensions/
 * Drag the extension file (theylive.crx) into the Chrome extensions page
 
